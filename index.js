@@ -6,7 +6,8 @@ const moment = require('moment-timezone');
 moment.locale('pt-br');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
+
 
 console.log('🟢 Iniciando servidor leve para filtro de tempo...');
 process.on('uncaughtException', (err) => {
