@@ -6,8 +6,7 @@ const moment = require('moment-timezone');
 moment.locale('pt-br');
 
 const app = express();
-const PORT = process.env.PORT;
-
+const PORT = process.env.PORT || 3000;
 
 console.log('🟢 Iniciando servidor leve para filtro de tempo...');
 process.on('uncaughtException', (err) => {
@@ -33,9 +32,17 @@ app.post('/verificar-tempo', (req, res) => {
   }
 
   try {
-    const dataComentario = moment.tz(timestampRecebido, "D [de] MMMM [de] YYYY [às] H:mm", 'America/Sao_Paulo');
+    // Detecta automaticamente se o timestamp está em formato ISO ou texto humano
+    let dataComentario;
+
+    if (moment(timestampRecebido, moment.ISO_8601, true).isValid()) {
+      dataComentario = moment(timestampRecebido).tz('America/Sao_Paulo');
+    } else {
+      dataComentario = moment.tz(timestampRecebido, "D [de] MMMM [de] YYYY [às] H:mm", 'America/Sao_Paulo');
+    }
+
     const agora = moment.tz('America/Sao_Paulo');
-    const limite = agora.subtract(10, 'minutes');
+    const limite = agora.clone().subtract(10, 'minutes');
 
     const podeResponder = dataComentario.isAfter(limite);
 
