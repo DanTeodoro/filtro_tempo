@@ -42,7 +42,7 @@ app.post('/verificar-tempo', (req, res) => {
     }
 
     const agora = moment.tz('America/Sao_Paulo');
-    const limite = agora.clone().subtract(10, 'minutes');
+    const limite = agora.clone().subtract(30, 'minutes');
 
     const podeResponder = dataComentario.isAfter(limite);
 
